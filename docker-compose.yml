@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: health_ai_db
+    environment:
+      POSTGRES_USER: healthadmin
+      POSTGRES_PASSWORD: healthpassword123
+      POSTGRES_DB: health_ai
+    ports:
+      - "5433:5432" # Dışarıdan 5433 ile gel, içeride 5432'ye bağla
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - health_net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: health_ai_backend
+    environment:
+      - DATABASE_URL=postgresql://healthadmin:healthpassword123@db:5432/health_ai?schema=public
+      - JWT_SECRET=super_secret_jwt_key_for_health_ai
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - health_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: health_ai_frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - health_net
+
+volumes:
+  pgdata:
+
+networks:
+  health_net:
+    driver: bridge

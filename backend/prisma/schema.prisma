@@ -1,0 +1,189 @@
+// ============================================================================
+// HEALTH AI Co-Creation & Innovation Platform — Prisma Schema
+// Aligned with SRS & SDD Specification
+// ============================================================================
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ============================================================================
+// ENUMS — Strict SRS/SDD alignment
+// ============================================================================
+
+// User Roles (SRS FR-01, FR-02)
+enum Role {
+  ENGINEER
+  HEALTHCARE
+  ADMIN
+}
+
+// Post Lifecycle States (SRS FR-15 through FR-22)
+enum PostStatus {
+  DRAFT
+  ACTIVE
+  MEETING_SCHEDULED
+  PARTNER_FOUND
+  EXPIRED
+  REMOVED
+  ARCHIVED
+}
+
+// Project Development Stages (SRS FR-17)
+enum ProjectStage {
+  IDEA
+  CONCEPT_VALIDATION
+  PROTOTYPE
+  PILOT_TESTING
+  PRE_DEPLOYMENT
+}
+
+// Types of Collaboration Sought (SRS FR-17)
+enum CollaborationType {
+  ADVISOR
+  COFOUNDER
+  RESEARCH_PARTNER
+}
+
+// Confidentiality Level for Posts (SRS FR-18)
+enum ConfidentialityLevel {
+  PUBLIC_PITCH
+  MEETING_ONLY
+}
+
+// Meeting Request Lifecycle States (SRS FR-25 through FR-30)
+enum MeetingStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+// ============================================================================
+// MODELS
+// ============================================================================
+
+// User — SRS Section 3.1, SDD Section 5.1
+model User {
+  id                   String           @id @default(uuid())
+  email                String           @unique
+  password_hash        String
+  role                 Role
+  full_name            String?
+  city                 String?
+  country              String?
+  institution          String?
+  professional_summary String?          @db.Text
+  is_active            Boolean          @default(true)
+  is_email_verified    Boolean          @default(false)
+  profile_completed    Boolean          @default(false)
+  last_login           DateTime?
+  created_at           DateTime         @default(now())
+  updated_at           DateTime         @updatedAt
+
+  // Relations
+  posts                Post[]
+  meeting_requests     MeetingRequest[]
+  activity_logs        ActivityLog[]
+  notifications        Notification[]
+  ai_analyses          AIAnalysis[]
+}
+
+// Post — SRS Section 3.2, SDD Section 5.2
+// Contains role-conditional fields:
+//   Engineer posts  → healthcare_expertise_needed, high_level_idea
+//   Healthcare posts → desired_technical_expertise, level_of_commitment
+model Post {
+  id                          String               @id @default(uuid())
+  user_id                     String
+  user                        User                 @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  status                      PostStatus           @default(DRAFT)
+  title                       String
+  working_domain              String
+  required_expertise          String
+  confidentiality_level       ConfidentialityLevel @default(PUBLIC_PITCH)
+  short_explanation           String?              @db.Text
+  collaboration_type          CollaborationType    @default(ADVISOR)
+  project_stage               ProjectStage         @default(IDEA)
+  city                        String
+  country                     String
+  expiry_date                 DateTime?
+  auto_close_enabled          Boolean              @default(false)
+
+  // Engineer-specific fields (SRS FR-17)
+  healthcare_expertise_needed String?              @db.Text
+  high_level_idea             String?              @db.Text
+
+  // Healthcare-specific fields (SRS FR-17)
+  desired_technical_expertise String?              @db.Text
+  level_of_commitment         String?
+
+  created_at                  DateTime             @default(now())
+  updated_at                  DateTime             @updatedAt
+
+  // Relations
+  meeting_requests            MeetingRequest[]
+  ai_analyses                 AIAnalysis[]
+}
+
+// MeetingRequest — SRS Section 3.3, SDD Section 5.3
+model MeetingRequest {
+  id                  String        @id @default(uuid())
+  post_id             String
+  post                Post          @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  requester_id        String
+  requester           User          @relation(fields: [requester_id], references: [id], onDelete: Cascade)
+  nda_accepted        Boolean       @default(false)
+  proposed_time_slots Json          // JSON array holding exactly 3 time slot objects
+  selected_time_slot  DateTime?
+  status              MeetingStatus @default(PENDING)
+  decline_reason      String?       @db.Text
+  created_at          DateTime      @default(now())
+  updated_at          DateTime      @updatedAt
+}
+
+// ActivityLog — SRS Section 3.5, SDD Section 5.5 (Audit Trail)
+model ActivityLog {
+  id                 String   @id @default(uuid())
+  user_id            String
+  user               User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  role               String
+  action_type        String
+  target_entity_id   String?
+  target_entity_type String?
+  result_status      String
+  ip_address         String
+  details            String?  @db.Text
+  timestamp          DateTime @default(now())
+}
+
+// Notification — Platform notification system
+model Notification {
+  id          String   @id @default(uuid())
+  user_id     String
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  title       String
+  message     String   @db.Text
+  is_read     Boolean  @default(false)
+  action_link String?
+  created_at  DateTime @default(now())
+}
+
+// AIAnalysis — AI-powered analysis results (future use)
+model AIAnalysis {
+  id               String   @id @default(uuid())
+  user_id          String
+  user             User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  post_id          String?
+  post             Post?    @relation(fields: [post_id], references: [id], onDelete: SetNull)
+  analysis_type    String
+  input_data       Json
+  output_result    Json
+  created_at       DateTime @default(now())
+}
