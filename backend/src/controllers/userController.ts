@@ -70,6 +70,76 @@ export const updateProfile = async (req: Request, res: Response) => {
 };
 
 // ============================================================================
+// POST /api/users/complete-profile — First-Login Profile Completion
+// SRS FR-04: Users must complete their profile before accessing platform features
+// ============================================================================
+export const completeProfile = async (req: Request, res: Response) => {
+  const { full_name, institution, city, country, professional_summary } = req.body;
+
+  // Validate all required fields
+  if (!full_name?.trim() || !institution?.trim() || !city?.trim() || !country?.trim() || !professional_summary?.trim()) {
+    return res.status(400).json({
+      message: "All fields are required: full name, institution, city, country, and professional summary."
+    });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({ where: { id: req.user?.id } });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    if (user.profile_completed) {
+      return res.status(400).json({ message: "Profile is already completed." });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user?.id },
+      data: {
+        full_name: full_name.trim(),
+        institution: institution.trim(),
+        city: city.trim(),
+        country: country.trim(),
+        professional_summary: professional_summary.trim(),
+        profile_completed: true,
+      },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        full_name: true,
+        city: true,
+        country: true,
+        institution: true,
+        professional_summary: true,
+        profile_completed: true,
+      }
+    });
+
+    // Activity log
+    await prisma.activityLog.create({
+      data: {
+        user_id: req.user!.id,
+        role: req.user!.role,
+        action_type: 'PROFILE_COMPLETED',
+        result_status: 'SUCCESS',
+        ip_address: req.ip || 'unknown',
+        details: 'User completed their profile for the first time.'
+      }
+    });
+
+    res.json({
+      message: "Profile completed successfully! Welcome to Health AI.",
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error("Complete profile error:", error);
+    res.status(500).json({ message: "Server error while completing profile." });
+  }
+};
+
+// ============================================================================
 // DELETE /api/users/me — GDPR: Delete Account & Purge Data
 // SRS NFR-08 (GDPR Compliance)
 // Cascading deletion order: AI Analyses → Notifications → Activity Logs →

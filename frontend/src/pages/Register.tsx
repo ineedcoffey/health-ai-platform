@@ -1,20 +1,18 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('ENGINEER');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [registered, setRegistered] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccess('');
     setLoading(true);
 
     try {
@@ -24,14 +22,43 @@ export default function Register() {
         role
       });
 
-      setSuccess('Registration successful! Redirecting to sign in...');
-      setTimeout(() => navigate('/login'), 2000);
+      setRegistered(true);
     } catch (err: any) {
       setError(err.response?.data?.message || 'An error occurred during registration.');
     } finally {
       setLoading(false);
     }
   };
+
+  // Post-registration success screen
+  if (registered) {
+    return (
+      <div className="form-container animate-fade-in">
+        <div className="form-card" style={{ textAlign: 'center' }}>
+          <div className="verify-email-icon" style={{ background: 'var(--success-bg)', borderColor: 'rgba(16, 185, 129, 0.2)' }}>
+            <span style={{ color: 'var(--success)' }}>📧</span>
+          </div>
+          <h2 style={{ marginBottom: '8px' }}>Check Your Email</h2>
+          <p style={{ marginBottom: '8px' }}>
+            We've sent a verification link to <strong style={{ color: 'var(--text-primary)' }}>{email}</strong>
+          </p>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '24px' }}>
+            Please click the link in your email to verify your account before signing in. 
+            The link will expire in 24 hours.
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <Link to="/login" className="btn btn-primary btn-full btn-lg">
+              Go to Sign In
+            </Link>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              Didn't receive the email? Check your spam folder or sign in to resend.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="form-container animate-fade-in">
@@ -43,7 +70,6 @@ export default function Register() {
         </div>
 
         {error && <div className="alert alert-error" style={{ marginBottom: '20px' }}>⚠️ {error}</div>}
-        {success && <div className="alert alert-success" style={{ marginBottom: '20px' }}>✅ {success}</div>}
 
         <form onSubmit={handleRegister} className="form-stack">
           <div className="form-group">

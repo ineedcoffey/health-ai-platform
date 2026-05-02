@@ -3,6 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } f
 import { Toaster } from 'react-hot-toast';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import VerifyEmail from './pages/VerifyEmail';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import CompleteProfile from './pages/CompleteProfile';
 import Dashboard from './pages/Dashboard';
 import CreatePost from './pages/CreatePost';
 import Profile from './pages/Profile';
@@ -30,9 +34,24 @@ const getUser = () => {
   }
 };
 
+// ── Auth Guard: redirects to /login if not authenticated ──────────────────
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem('token');
   if (!token) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+};
+
+// ── Profile Guard: redirects to /complete-profile if profile incomplete ───
+// Wraps ProtectedRoute — user must be logged in AND have completed profile
+const ProfileGuard = ({ children }: { children: React.ReactNode }) => {
+  const token = localStorage.getItem('token');
+  if (!token) return <Navigate to="/login" replace />;
+
+  const profileCompleted = localStorage.getItem('profileCompleted');
+  if (profileCompleted !== 'true') {
+    return <Navigate to="/complete-profile" replace />;
+  }
+
   return <>{children}</>;
 };
 
@@ -48,6 +67,25 @@ function Navbar() {
   };
 
   const isActive = (path: string) => location.pathname === path;
+
+  // Hide navbar on complete-profile page (minimal distraction)
+  if (location.pathname === '/complete-profile') {
+    return (
+      <nav className="navbar">
+        <div className="navbar-inner">
+          <Link to="/complete-profile" className="navbar-brand">
+            <span className="brand-icon">⚕</span>
+            Health AI
+          </Link>
+          <div className="navbar-links">
+            <button onClick={handleLogout} className="nav-link danger">
+              ↪ Sign Out
+            </button>
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   if (!token) {
     return (
@@ -128,15 +166,21 @@ function App() {
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
-            {/* Protected Routes */}
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/create-post" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
-            <Route path="/my-posts" element={<ProtectedRoute><MyPosts /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="/inbox" element={<ProtectedRoute><Inbox /></ProtectedRoute>} />
-            <Route path="/meeting-request/:postId" element={<ProtectedRoute><MeetingRequest /></ProtectedRoute>} />
-            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            {/* Profile Completion — requires auth but NOT completed profile */}
+            <Route path="/complete-profile" element={<ProtectedRoute><CompleteProfile /></ProtectedRoute>} />
+
+            {/* Protected Routes — require auth AND completed profile */}
+            <Route path="/dashboard" element={<ProfileGuard><Dashboard /></ProfileGuard>} />
+            <Route path="/create-post" element={<ProfileGuard><CreatePost /></ProfileGuard>} />
+            <Route path="/my-posts" element={<ProfileGuard><MyPosts /></ProfileGuard>} />
+            <Route path="/profile" element={<ProfileGuard><Profile /></ProfileGuard>} />
+            <Route path="/inbox" element={<ProfileGuard><Inbox /></ProfileGuard>} />
+            <Route path="/meeting-request/:postId" element={<ProfileGuard><MeetingRequest /></ProfileGuard>} />
+            <Route path="/admin" element={<ProfileGuard><AdminDashboard /></ProfileGuard>} />
 
             <Route path="*" element={<Navigate to="/login" />} />
           </Routes>

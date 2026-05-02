@@ -873,3 +873,253 @@ a:hover {
   background: var(--primary-glow-strong);
   color: var(--text-primary);
 }
+
+/* ============================================================================
+   EMAIL VERIFICATION & PASSWORD RESET
+   ============================================================================ */
+
+/* Verification Icon Container */
+.verify-email-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  background: var(--primary-glow);
+  border: 2px solid rgba(99, 102, 241, 0.2);
+  font-size: 2rem;
+}
+
+.verify-success-icon {
+  background: var(--success-bg);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.verify-success-icon span {
+  color: var(--success);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.verify-error-icon {
+  background: var(--danger-bg);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.verify-error-icon span {
+  color: var(--danger);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Loading Spinner */
+.verify-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border-default);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Password Strength Indicator */
+.password-strength {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.password-strength-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--border-default);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.password-strength-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--transition-base), background var(--transition-base);
+}
+
+.password-strength-fill.strength-weak {
+  background: var(--danger);
+}
+
+.password-strength-fill.strength-medium {
+  background: var(--warning);
+}
+
+.password-strength-fill.strength-strong {
+  background: var(--success);
+}
+
+.password-strength-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================================
+   COMPLETE PROFILE PAGE
+   ============================================================================ */
+
+.complete-profile-container {
+  max-width: 640px;
+  margin: var(--space-xl) auto;
+}
+
+.complete-profile-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.complete-profile-header {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-2xl) var(--space-lg);
+  background: linear-gradient(180deg, rgba(99, 102, 241, 0.06) 0%, transparent 100%);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.complete-profile-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, var(--primary-glow), var(--accent-glow));
+  border: 2px solid rgba(99, 102, 241, 0.15);
+  font-size: 2rem;
+}
+
+.complete-profile-header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}
+
+.complete-profile-header p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ── Progress Steps ────────────────────────────────────────────────────── */
+.profile-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-top: var(--space-lg);
+}
+
+.profile-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-step span {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--border-default);
+  color: var(--text-muted);
+  transition: all var(--transition-base);
+}
+
+.profile-step.completed .step-circle {
+  background: var(--success-bg);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.profile-step.completed span {
+  color: var(--success-light);
+}
+
+.profile-step.active .step-circle {
+  background: var(--primary-glow);
+  border-color: var(--primary);
+  color: var(--primary-light);
+  box-shadow: 0 0 16px var(--primary-glow);
+}
+
+.profile-step.active span {
+  color: var(--primary-light);
+  font-weight: 600;
+}
+
+.profile-step-connector {
+  width: 40px;
+  height: 2px;
+  background: var(--border-default);
+  margin: 0 8px;
+  margin-bottom: 22px;
+  border-radius: 1px;
+  transition: background var(--transition-base);
+}
+
+.profile-step-connector.completed {
+  background: var(--success);
+}
+
+.profile-step-connector.active {
+  background: linear-gradient(90deg, var(--success), var(--primary));
+}
+
+/* ── Form ──────────────────────────────────────────────────────────────── */
+.complete-profile-form {
+  padding: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+@media (max-width: 640px) {
+  .complete-profile-container {
+    margin: var(--space-md) auto;
+  }
+
+  .complete-profile-header {
+    padding: var(--space-lg);
+  }
+
+  .complete-profile-form {
+    padding: var(--space-lg);
+  }
+
+  .profile-steps {
+    gap: 0;
+  }
+
+  .profile-step-connector {
+    width: 24px;
+  }
+
+  .profile-step span {
+    font-size: 0.65rem;
+  }
+}

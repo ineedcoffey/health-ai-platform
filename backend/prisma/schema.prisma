@@ -83,6 +83,10 @@ model User {
   is_active            Boolean          @default(true)
   is_email_verified    Boolean          @default(false)
   profile_completed    Boolean          @default(false)
+  email_verification_token   String?   @unique
+  email_verification_expires DateTime?
+  password_reset_token       String?   @unique
+  password_reset_expires     DateTime?
   last_login           DateTime?
   created_at           DateTime         @default(now())
   updated_at           DateTime         @updatedAt
