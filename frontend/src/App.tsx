@@ -13,6 +13,7 @@ import Profile from './pages/Profile';
 import MeetingRequest from './pages/MeetingRequest';
 import Inbox from './pages/Inbox';
 import MyPosts from './pages/MyPosts';
+import PostDetail from './pages/PostDetail';
 import AdminDashboard from './pages/AdminDashboard';
 import './index.css';
 
@@ -74,7 +75,12 @@ function Navbar() {
       <nav className="navbar">
         <div className="navbar-inner">
           <Link to="/complete-profile" className="navbar-brand">
-            <span className="brand-icon">⚕</span>
+            <span className="brand-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 12h4l3-9 4 18 3-9h4" />
+                <circle cx="19" cy="12" r="2" fill="white" stroke="none" opacity="0.7" />
+              </svg>
+            </span>
             Health AI
           </Link>
           <div className="navbar-links">
@@ -92,7 +98,12 @@ function Navbar() {
       <nav className="navbar">
         <div className="navbar-inner">
           <Link to="/login" className="navbar-brand">
-            <span className="brand-icon">⚕</span>
+            <span className="brand-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 12h4l3-9 4 18 3-9h4" />
+                <circle cx="19" cy="12" r="2" fill="white" stroke="none" opacity="0.7" />
+              </svg>
+            </span>
             Health AI
           </Link>
           <div className="navbar-links">
@@ -112,7 +123,12 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-inner">
         <Link to="/dashboard" className="navbar-brand">
-          <span className="brand-icon">⚕</span>
+          <span className="brand-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12h4l3-9 4 18 3-9h4" />
+              <circle cx="19" cy="12" r="2" fill="white" stroke="none" opacity="0.7" />
+            </svg>
+          </span>
           Health AI
         </Link>
         <div className="navbar-links">
@@ -180,6 +196,7 @@ function App() {
             <Route path="/profile" element={<ProfileGuard><Profile /></ProfileGuard>} />
             <Route path="/inbox" element={<ProfileGuard><Inbox /></ProfileGuard>} />
             <Route path="/meeting-request/:postId" element={<ProfileGuard><MeetingRequest /></ProfileGuard>} />
+            <Route path="/post/:postId" element={<ProfileGuard><PostDetail /></ProfileGuard>} />
             <Route path="/admin" element={<ProfileGuard><AdminDashboard /></ProfileGuard>} />
 
             <Route path="*" element={<Navigate to="/login" />} />

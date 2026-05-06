@@ -7,6 +7,7 @@ import {
   updatePost,
   updatePostStatus
 } from '../controllers/postController';
+import { triggerAIAnalysis, getAIInsight } from '../controllers/aiController';
 import { authenticateJWT } from '../middleware/authMiddleware';
 
 const router = Router();
@@ -20,5 +21,9 @@ router.get('/:postId', getPostById);
 router.post('/', authenticateJWT, createPost);
 router.put('/:postId', authenticateJWT, updatePost);
 router.patch('/:postId/status', authenticateJWT, updatePostStatus);
+
+// AI Analysis routes (Step 11)
+router.post('/:postId/analyze', authenticateJWT, triggerAIAnalysis);
+router.get('/:postId/ai-insight', getAIInsight);
 
 export default router;

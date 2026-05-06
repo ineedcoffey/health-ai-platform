@@ -1123,3 +1123,313 @@ a:hover {
     font-size: 0.65rem;
   }
 }
+
+/* ============================================================================
+   AI INSIGHT CARD — Glassmorphism + Sparkle Theme (Step 11)
+   ============================================================================ */
+
+/* ── Gradient border animation ──────────────────────────────────────────── */
+@keyframes ai-gradient-rotate {
+  0%   { --ai-angle: 0deg; }
+  100% { --ai-angle: 360deg; }
+}
+
+@property --ai-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.ai-insight-card {
+  position: relative;
+  background: linear-gradient(
+    165deg,
+    rgba(22, 23, 34, 0.95),
+    rgba(30, 31, 51, 0.9),
+    rgba(22, 23, 34, 0.95)
+  );
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(129, 140, 248, 0.15);
+  box-shadow:
+    0 4px 32px rgba(99, 102, 241, 0.08),
+    0 0 80px rgba(6, 182, 212, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* Animated glow border overlay */
+.ai-insight-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius-xl);
+  padding: 1px;
+  background: linear-gradient(
+    var(--ai-angle, 0deg),
+    transparent 20%,
+    rgba(99, 102, 241, 0.4) 40%,
+    rgba(6, 182, 212, 0.4) 60%,
+    transparent 80%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: ai-gradient-rotate 6s linear infinite;
+  pointer-events: none;
+}
+
+/* Ambient glow particles */
+.ai-insight-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 30% 50%,
+    rgba(99, 102, 241, 0.06) 0%,
+    transparent 50%
+  ),
+  radial-gradient(
+    circle at 70% 30%,
+    rgba(6, 182, 212, 0.04) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+  animation: ai-ambient-float 8s ease-in-out infinite alternate;
+}
+
+@keyframes ai-ambient-float {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-3%, 3%) rotate(3deg); }
+}
+
+/* ── Card Header ────────────────────────────────────────────────────────── */
+.ai-insight-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.ai-insight-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ai-sparkle-icon {
+  font-size: 1.5rem;
+  animation: ai-sparkle-pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.5));
+}
+
+@keyframes ai-sparkle-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.15); opacity: 0.8; }
+}
+
+/* ── Shimmer Loading State ──────────────────────────────────────────────── */
+.ai-shimmer-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;
+}
+
+.ai-shimmer-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary-glow);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.ai-shimmer-text {
+  text-align: center;
+}
+
+.ai-shimmer-bars {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.ai-shimmer-bar {
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(99, 102, 241, 0.2) 40%,
+    rgba(6, 182, 212, 0.2) 60%,
+    rgba(99, 102, 241, 0.08) 100%
+  );
+  background-size: 200% 100%;
+  animation: ai-shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes ai-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ── AI Results Content ─────────────────────────────────────────────────── */
+.ai-insight-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+@media (max-width: 640px) {
+  .ai-insight-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+}
+
+/* ── Score Gauge ────────────────────────────────────────────────────────── */
+.ai-score-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.ai-score-gauge {
+  position: relative;
+  width: 110px;
+  height: 110px;
+}
+
+.ai-score-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(0deg);
+}
+
+.ai-score-arc {
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ai-score-value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+
+.ai-score-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.ai-score-percent {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.ai-score-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ai-score-sublabel {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ── Recommendation Section ─────────────────────────────────────────────── */
+.ai-recommendation-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-recommendation-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+
+.ai-recommendation-text {
+  font-size: 0.92rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 3px solid rgba(99, 102, 241, 0.3);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.ai-synergy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  background: var(--accent-glow);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  letter-spacing: 0.02em;
+}
+
+/* ── Dashboard AI Sparkle Badge Wrapper ──────────────────────────────────── */
+.ai-sparkle-badge-wrapper {
+  position: relative;
+}
+
+.ai-sparkle-badge-wrapper::after {
+  content: '✨';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 0.55rem;
+  animation: ai-badge-twinkle 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.6));
+}
+
+@keyframes ai-badge-twinkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.8); }
+}
+

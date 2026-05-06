@@ -60,17 +60,18 @@ const computeMatchScore = (post: any, userCity: string, userRole: string): numbe
 };
 
 const getMatchColor = (score: number) => {
-  if (score >= 85) return 'var(--success)';
-  if (score >= 70) return 'var(--accent)';
-  if (score >= 55) return 'var(--warning)';
+  if (score >= 85) return '#34d399';
+  if (score >= 70) return '#22d3ee';
+  if (score >= 55) return '#818cf8';
   return 'var(--text-muted)';
 };
 
-const getMatchLabel = (score: number) => {
-  if (score >= 85) return 'Excellent Match';
-  if (score >= 70) return 'Good Match';
-  if (score >= 55) return 'Moderate Match';
-  return 'Low Match';
+const getMatchLabel = (score: number, isAI: boolean) => {
+  const prefix = isAI ? '✨ ' : '';
+  if (score >= 85) return `${prefix}Excellent Match`;
+  if (score >= 70) return `${prefix}Good Match`;
+  if (score >= 55) return `${prefix}Moderate Match`;
+  return `${prefix}Low Match`;
 };
 
 export default function Dashboard() {
@@ -313,7 +314,8 @@ export default function Dashboard() {
         <div className="stagger-children" style={{ display: 'grid', gap: '16px' }}>
           {sortedPosts.map((post: any) => {
             const isOwnPost = post.user_id === currentUser?.id;
-            const matchScore = computeMatchScore(post, userCity, userRole);
+            const hasAIScore = post.ai_score !== null && post.ai_score !== undefined;
+            const matchScore = hasAIScore ? post.ai_score : computeMatchScore(post, userCity, userRole);
             const isLocalMatch = userCity && post.city && userCity.toLowerCase() === post.city.toLowerCase();
 
             return (
@@ -346,7 +348,20 @@ export default function Dashboard() {
 
                 <div className="card-header">
                   <div style={{ flex: 1 }}>
-                    <h3 style={{ color: 'var(--primary-light)', marginBottom: '8px' }}>{post.title}</h3>
+                    <h3 style={{ marginBottom: '8px' }}>
+                      <Link
+                        to={`/post/${post.id}`}
+                        style={{
+                          color: 'var(--primary-light)',
+                          textDecoration: 'none',
+                          transition: 'color 150ms ease',
+                        }}
+                        onMouseOver={e => (e.currentTarget.style.color = 'var(--accent-light)')}
+                        onMouseOut={e => (e.currentTarget.style.color = 'var(--primary-light)')}
+                      >
+                        {post.title}
+                      </Link>
+                    </h3>
                     <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                       <span className="badge badge-primary">{post.working_domain}</span>
                       <span className="badge badge-ghost">{stageLabels[post.project_stage] || post.project_stage}</span>
@@ -365,7 +380,7 @@ export default function Dashboard() {
                     gap: '4px',
                     minWidth: '70px',
                   }}>
-                    <div style={{
+                    <div className={hasAIScore ? 'ai-sparkle-badge-wrapper' : ''} style={{
                       width: '48px',
                       height: '48px',
                       borderRadius: '50%',
@@ -377,6 +392,7 @@ export default function Dashboard() {
                       color: getMatchColor(matchScore),
                       border: `2px solid ${getMatchColor(matchScore)}`,
                       background: `${getMatchColor(matchScore)}15`,
+                      position: 'relative',
                     }}>
                       {matchScore}%
                     </div>
@@ -386,7 +402,7 @@ export default function Dashboard() {
                       fontWeight: '600',
                       textAlign: 'center',
                     }}>
-                      {getMatchLabel(matchScore)}
+                      {getMatchLabel(matchScore, hasAIScore)}
                     </span>
                   </div>
                 </div>

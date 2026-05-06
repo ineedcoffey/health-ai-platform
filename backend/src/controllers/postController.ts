@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { PostStatus, ConfidentialityLevel, CollaborationType, ProjectStage } from '@prisma/client';
 import prisma from '../lib/prisma';
+import { analyzePost } from '../utils/aiService';
 
 // ============================================================================
 // POST /api/posts — Create a new post
@@ -70,6 +71,18 @@ export const createPost = async (req: Request, res: Response) => {
         ip_address: req.ip || 'unknown',
       }
     });
+
+    // Trigger AI analysis in background when post is published as ACTIVE
+    if (post.status === 'ACTIVE') {
+      analyzePost(post.id, req.user.id, {
+        title: post.title,
+        working_domain: post.working_domain,
+        short_explanation: post.short_explanation,
+        required_expertise: post.required_expertise,
+        collaboration_type: post.collaboration_type,
+        project_stage: post.project_stage,
+      }).catch(err => console.error('[AI] Background analysis failed:', err.message));
+    }
 
     res.status(201).json({ message: "Post created successfully.", post });
   } catch (error: any) {
@@ -236,6 +249,18 @@ export const updatePost = async (req: Request, res: Response) => {
       }
     });
 
+    // Re-trigger AI analysis on content update (background, non-blocking)
+    if (updatedPost.status === 'ACTIVE') {
+      analyzePost(postId, req.user!.id, {
+        title: updatedPost.title,
+        working_domain: updatedPost.working_domain,
+        short_explanation: updatedPost.short_explanation,
+        required_expertise: updatedPost.required_expertise,
+        collaboration_type: updatedPost.collaboration_type,
+        project_stage: updatedPost.project_stage,
+      }).catch(err => console.error('[AI] Background re-analysis failed:', err.message));
+    }
+
     res.json({ message: "Post updated successfully.", post: updatedPost });
   } catch (error: any) {
     console.error("Update post error:", error);
@@ -285,6 +310,18 @@ export const updatePostStatus = async (req: Request, res: Response) => {
         ip_address: req.ip || 'unknown',
       }
     });
+
+    // Trigger AI analysis when post is published (DRAFT → ACTIVE)
+    if (status === 'ACTIVE' && updatedPost.ai_score === null) {
+      analyzePost(postId, req.user!.id, {
+        title: updatedPost.title,
+        working_domain: updatedPost.working_domain,
+        short_explanation: updatedPost.short_explanation,
+        required_expertise: updatedPost.required_expertise,
+        collaboration_type: updatedPost.collaboration_type,
+        project_stage: updatedPost.project_stage,
+      }).catch(err => console.error('[AI] Background publish analysis failed:', err.message));
+    }
 
     res.json({ message: `Post status updated to ${status}.`, post: updatedPost });
   } catch (error: any) {
