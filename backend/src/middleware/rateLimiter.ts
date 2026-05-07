@@ -11,28 +11,26 @@ import rateLimit from 'express-rate-limit';
  * Allows 100 requests per 15-minute window per IP.
  */
 export const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,  // 15 minutes
-  max: 100,                    // 100 requests per window
+  windowMs: 1 * 60 * 1000,    // DEV: 1 minute (production: 15 min)
+  max: 10000,                  // DEV: effectively unlimited (production: 100)
   standardHeaders: true,       // Return rate limit info in `RateLimit-*` headers
   legacyHeaders: false,        // Disable `X-RateLimit-*` headers
   message: {
-    message: 'Too many requests from this IP address. Please try again after 15 minutes.',
+    message: 'Too many requests from this IP address. Please try again later.',
   },
 });
 
 /**
  * Strict Auth Rate Limiter
  * Applies to login and register endpoints only.
- * Allows 5 attempts per 15-minute window per IP to prevent brute-force attacks.
  */
 export const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,  // 15 minutes
-  max: 5,                     // 5 attempts per window
+  windowMs: 1 * 60 * 1000,    // DEV: 1 minute (production: 15 min)
+  max: 10000,                  // DEV: effectively unlimited (production: 5)
   standardHeaders: true,
   legacyHeaders: false,
   message: {
-    message: 'Too many authentication attempts. Please try again after 15 minutes.',
+    message: 'Too many authentication attempts. Please try again later.',
   },
-  // Skip successful requests — only count failed attempts for login
   skipSuccessfulRequests: false,
 });

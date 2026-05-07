@@ -80,6 +80,13 @@ export const register = async (req: Request, res: Response) => {
       }
     });
 
+    // DEV: Print verification link directly in terminal for easy access
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    console.log(`\n🔗 ─── VERIFICATION LINK (DEV) ───────────────────────────────`);
+    console.log(`   User: ${user.email}`);
+    console.log(`   Link: ${clientUrl}/verify-email?token=${verificationToken}`);
+    console.log(`───────────────────────────────────────────────────────────────\n`);
+
     // Send verification email (non-blocking — don't fail registration if email fails)
     try {
       await sendVerificationEmail(user.email, verificationToken);
@@ -183,6 +190,13 @@ export const resendVerification = async (req: Request, res: Response) => {
         email_verification_expires: verificationExpires,
       }
     });
+
+    // DEV: Print verification link directly in terminal for easy access
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    console.log(`\n🔗 ─── RESENT VERIFICATION LINK (DEV) ────────────────────────`);
+    console.log(`   User: ${user.email}`);
+    console.log(`   Link: ${clientUrl}/verify-email?token=${verificationToken}`);
+    console.log(`───────────────────────────────────────────────────────────────\n`);
 
     try {
       await sendVerificationEmail(user.email, verificationToken, user.full_name);

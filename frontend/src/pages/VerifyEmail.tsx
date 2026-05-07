@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useSearchParams } from 'react-router-dom';
 
@@ -8,12 +8,17 @@ export default function VerifyEmail() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('');
 
+  const hasCalledAPI = React.useRef(false);
+
   useEffect(() => {
     if (!token) {
       setStatus('error');
       setMessage('No verification token provided.');
       return;
     }
+
+    if (hasCalledAPI.current) return;
+    hasCalledAPI.current = true;
 
     const verify = async () => {
       try {
