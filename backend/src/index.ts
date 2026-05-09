@@ -18,6 +18,7 @@ import adminRoutes from './routes/adminRoutes';
 import { initCronJobs } from './jobs/cronJobs';
 
 const app = express();
+app.set('trust proxy', 1); // Enable trust proxy for cloud services like Render
 
 // ============================================================================
 // Security Middleware
