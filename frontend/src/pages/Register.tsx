@@ -9,6 +9,7 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [registered, setRegistered] = useState(false);
+  const [devVerificationLink, setDevVerificationLink] = useState('');
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +27,7 @@ export default function Register() {
         console.log(`\n🔗 ─── VERIFICATION LINK (DEV) ───────────────────────────────`);
         console.log(`   Link: ${response.data.dev_verification_link}`);
         console.log(`───────────────────────────────────────────────────────────────\n`);
+        setDevVerificationLink(response.data.dev_verification_link);
       }
 
       setRegistered(true);
@@ -52,6 +54,20 @@ export default function Register() {
             Please click the link in your email to verify your account before signing in.
             The link will expire in 24 hours.
           </p>
+
+          {devVerificationLink && (
+            <div style={{ marginBottom: '24px', padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px dashed var(--primary)', textAlign: 'left' }}>
+              <p style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '8px', color: 'var(--primary)' }}>
+                🛠️ Development Mode Only
+              </p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px' }}>
+                (This verification link is displayed here to bypass email checking during development. In production, users will only receive an email.)
+              </p>
+              <a href={devVerificationLink} style={{ fontSize: '0.85rem', wordBreak: 'break-all', color: 'var(--primary)', textDecoration: 'underline' }}>
+                Click here to verify account
+              </a>
+            </div>
+          )}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <Link to="/login" className="btn btn-primary btn-full btn-lg">

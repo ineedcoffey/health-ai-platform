@@ -10,6 +10,7 @@ export default function Login() {
   const [showResendVerification, setShowResendVerification] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
+  const [devVerificationLink, setDevVerificationLink] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +64,7 @@ export default function Login() {
         console.log(`\n🔗 ─── RESENT VERIFICATION LINK (DEV) ────────────────────────`);
         console.log(`   Link: ${response.data.dev_verification_link}`);
         console.log(`───────────────────────────────────────────────────────────────\n`);
+        setDevVerificationLink(response.data.dev_verification_link);
       }
 
       setResendSuccess(true);
@@ -93,9 +95,21 @@ export default function Login() {
           <div className="alert alert-info" style={{ marginBottom: '20px', flexDirection: 'column', alignItems: 'flex-start', gap: '12px' }}>
             <span>📧 Your email hasn't been verified yet.</span>
             {resendSuccess ? (
-              <span style={{ color: 'var(--success-light)', fontWeight: 500 }}>
-                ✅ Verification link sent! Check your inbox.
-              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+                <span style={{ color: 'var(--success-light)', fontWeight: 500 }}>
+                  ✅ Verification link sent! Check your inbox.
+                </span>
+                {devVerificationLink && (
+                  <div style={{ padding: '12px', background: 'var(--bg-secondary)', borderRadius: '6px', border: '1px dashed var(--primary)', textAlign: 'left', width: '100%' }}>
+                    <p style={{ fontSize: '0.8rem', fontWeight: 600, marginBottom: '6px', color: 'var(--primary)' }}>
+                      🛠️ Development Mode Only
+                    </p>
+                    <a href={devVerificationLink} style={{ fontSize: '0.8rem', wordBreak: 'break-all', color: 'var(--primary)', textDecoration: 'underline' }}>
+                      Click here to verify account
+                    </a>
+                  </div>
+                )}
+              </div>
             ) : (
               <button
                 type="button"
