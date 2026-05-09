@@ -47,6 +47,26 @@ export default function Profile() {
     }
   };
 
+  const handleExportData = () => {
+    toast.loading('Preparing your data export...', { id: 'export-toast' });
+    axios.get('https://health-ai-platform-backend.onrender.com/api/users/me/export', {
+      headers: { Authorization: `Bearer ${token}` },
+      responseType: 'blob'
+    }).then(res => {
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `my-health-ai-data-${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      toast.success('Data export complete!', { id: 'export-toast' });
+    }).catch(() => {
+      toast.error('Failed to export data.', { id: 'export-toast' });
+    });
+  };
+
   if (loading) {
     return (
       <div className="empty-state">
@@ -142,6 +162,20 @@ export default function Profile() {
           >
             {saving ? '⏳ Saving...' : '💾 Save Profile'}
           </button>
+          <div style={{ marginTop: '24px', borderTop: '1px solid var(--border-subtle)', paddingTop: '24px' }}>
+            <h3 style={{ fontSize: '1.1rem', marginBottom: '8px' }}>Data & Privacy</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
+              Download a copy of your personal data, posts, and meeting history in machine-readable format (JSON).
+            </p>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={handleExportData}
+              style={{ border: '1px solid var(--border-default)' }}
+            >
+              📥 Export My Data
+            </button>
+          </div>
         </form>
       </div>
     </div>

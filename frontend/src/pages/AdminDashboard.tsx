@@ -206,6 +206,14 @@ export default function AdminDashboard() {
             <div className="empty-state"><p>Loading statistics...</p></div>
           ) : (
             <>
+              {/* Quick Actions */}
+              <div className="section-title" style={{ marginTop: '0' }}>Quick Actions</div>
+              <div style={{ marginBottom: '32px', display: 'flex', gap: '12px', background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+                <button className="btn btn-primary" onClick={handleDownloadCSV}>
+                  📥 Export Data (Audit Logs CSV)
+                </button>
+              </div>
+
               {/* User Stats */}
               <div className="section-title">User Statistics</div>
               <div className="grid-3" style={{ marginBottom: '24px' }}>
