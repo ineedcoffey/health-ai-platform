@@ -57,7 +57,14 @@ export default function Login() {
     setResendSuccess(false);
 
     try {
-      await axios.post('https://health-ai-platform-backend.onrender.com/api/auth/resend-verification', { email });
+      const response = await axios.post('https://health-ai-platform-backend.onrender.com/api/auth/resend-verification', { email });
+      
+      if (response.data?.dev_verification_link) {
+        console.log(`\n🔗 ─── RESENT VERIFICATION LINK (DEV) ────────────────────────`);
+        console.log(`   Link: ${response.data.dev_verification_link}`);
+        console.log(`───────────────────────────────────────────────────────────────\n`);
+      }
+
       setResendSuccess(true);
     } catch {
       // Silently handle — the API always returns success to prevent enumeration

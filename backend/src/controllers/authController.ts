@@ -96,7 +96,8 @@ export const register = async (req: Request, res: Response) => {
 
     // FR-14: Generic success message (no information leakage)
     res.status(201).json({
-      message: "Registration successful! A verification link has been sent to your email. Please verify your email before logging in."
+      message: "Registration successful! A verification link has been sent to your email. Please verify your email before logging in.",
+      dev_verification_link: `${clientUrl}/verify-email?token=${verificationToken}`
     });
   } catch (error) {
     console.error("Registration error:", error);
@@ -205,7 +206,8 @@ export const resendVerification = async (req: Request, res: Response) => {
     }
 
     res.json({
-      message: "If this email is registered and unverified, a new verification link has been sent."
+      message: "If this email is registered and unverified, a new verification link has been sent.",
+      dev_verification_link: `${clientUrl}/verify-email?token=${verificationToken}`
     });
   } catch (error) {
     console.error("Resend verification error:", error);

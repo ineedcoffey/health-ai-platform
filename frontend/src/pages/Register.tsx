@@ -16,11 +16,17 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await axios.post('https://health-ai-platform-backend.onrender.com/api/auth/register', {
+      const response = await axios.post('https://health-ai-platform-backend.onrender.com/api/auth/register', {
         email,
         password,
         role
       });
+
+      if (response.data?.dev_verification_link) {
+        console.log(`\n🔗 ─── VERIFICATION LINK (DEV) ───────────────────────────────`);
+        console.log(`   Link: ${response.data.dev_verification_link}`);
+        console.log(`───────────────────────────────────────────────────────────────\n`);
+      }
 
       setRegistered(true);
     } catch (err: any) {
