@@ -22,7 +22,7 @@ export default function MeetingRequest() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/posts/${postId}`);
+        const res = await axios.get(`https://health-ai-platform-backend.onrender.com/api/posts/${postId}`);
         setPost(res.data);
       } catch {
         toast.error('Failed to load post details.');
@@ -48,7 +48,7 @@ export default function MeetingRequest() {
 
     setSubmitting(true);
     try {
-      await axios.post('http://localhost:5000/api/meetings', {
+      await axios.post('https://health-ai-platform-backend.onrender.com/api/meetings', {
         post_id: postId,
         nda_accepted: true,
         proposed_time_slots: [

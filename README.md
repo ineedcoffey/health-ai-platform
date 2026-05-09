@@ -102,7 +102,7 @@ cd health-ai-platform
 The script will:
 1. ✅ Start the PostgreSQL database via Docker
 2. ✅ Run database migrations
-3. ✅ Start the backend server on `http://localhost:5000`
+3. ✅ Start the backend server on `https://health-ai-platform-backend.onrender.com`
 4. ✅ Start the frontend dev server on `http://localhost:5173`
 
 ### Option 2: Manual Setup
@@ -129,7 +129,7 @@ npm run dev
 | Service | URL |
 |---------|-----|
 | 🌐 Frontend | http://localhost:5173 |
-| 🔌 Backend API | http://localhost:5000 |
+| 🔌 Backend API | https://health-ai-platform-backend.onrender.com |
 | 🗄️ Database | localhost:5433 |
 
 ---

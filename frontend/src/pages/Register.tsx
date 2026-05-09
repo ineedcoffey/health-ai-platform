@@ -16,7 +16,7 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/api/auth/register', {
+      await axios.post('https://health-ai-platform-backend.onrender.com/api/auth/register', {
         email,
         password,
         role
@@ -43,7 +43,7 @@ export default function Register() {
             We've sent a verification link to <strong style={{ color: 'var(--text-primary)' }}>{email}</strong>
           </p>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '24px' }}>
-            Please click the link in your email to verify your account before signing in. 
+            Please click the link in your email to verify your account before signing in.
             The link will expire in 24 hours.
           </p>
 

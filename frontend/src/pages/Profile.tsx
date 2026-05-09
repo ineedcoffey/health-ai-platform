@@ -13,7 +13,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/users/profile', {
+        const res = await axios.get('https://health-ai-platform-backend.onrender.com/api/users/profile', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProfile(res.data);
@@ -30,7 +30,7 @@ export default function Profile() {
     e.preventDefault();
     setSaving(true);
     try {
-      await axios.put('http://localhost:5000/api/users/profile', {
+      await axios.put('https://health-ai-platform-backend.onrender.com/api/users/profile', {
         full_name: profile.full_name,
         city: profile.city,
         country: profile.country,

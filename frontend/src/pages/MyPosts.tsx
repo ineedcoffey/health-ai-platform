@@ -21,7 +21,7 @@ export default function MyPosts() {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/posts/my-posts', {
+      const res = await axios.get('https://health-ai-platform-backend.onrender.com/api/posts/my-posts', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setPosts(res.data);
@@ -38,7 +38,7 @@ export default function MyPosts() {
 
   const handleStatusChange = async (postId: string, newStatus: string) => {
     try {
-      await axios.patch(`http://localhost:5000/api/posts/${postId}/status`,
+      await axios.patch(`https://health-ai-platform-backend.onrender.com/api/posts/${postId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

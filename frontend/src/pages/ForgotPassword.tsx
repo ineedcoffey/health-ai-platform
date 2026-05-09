@@ -14,7 +14,7 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
+      await axios.post('https://health-ai-platform-backend.onrender.com/api/auth/forgot-password', { email });
       setSubmitted(true);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Something went wrong. Please try again.');

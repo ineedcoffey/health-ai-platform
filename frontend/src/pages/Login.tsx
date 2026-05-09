@@ -19,7 +19,7 @@ export default function Login() {
     setResendSuccess(false);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post('https://health-ai-platform-backend.onrender.com/api/auth/login', {
         email,
         password
       });
@@ -57,7 +57,7 @@ export default function Login() {
     setResendSuccess(false);
 
     try {
-      await axios.post('http://localhost:5000/api/auth/resend-verification', { email });
+      await axios.post('https://health-ai-platform-backend.onrender.com/api/auth/resend-verification', { email });
       setResendSuccess(true);
     } catch {
       // Silently handle — the API always returns success to prevent enumeration

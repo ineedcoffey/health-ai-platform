@@ -65,7 +65,7 @@ export default function PostDetail() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/posts/${postId}`);
+        const res = await axios.get(`https://health-ai-platform-backend.onrender.com/api/posts/${postId}`);
         setPost(res.data);
       } catch {
         toast.error('Failed to load post details.');
@@ -84,7 +84,7 @@ export default function PostDetail() {
     setAiLoading(true);
     const interval = setInterval(async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/posts/${postId}/ai-insight`);
+        const res = await axios.get(`https://health-ai-platform-backend.onrender.com/api/posts/${postId}/ai-insight`);
         if (res.data.status === 'complete') {
           setPost((prev: any) => ({
             ...prev,
@@ -108,7 +108,7 @@ export default function PostDetail() {
     setReanalyzing(true);
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/posts/${postId}/analyze`,
+        `https://health-ai-platform-backend.onrender.com/api/posts/${postId}/analyze`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

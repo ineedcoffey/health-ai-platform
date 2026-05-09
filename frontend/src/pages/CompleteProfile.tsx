@@ -32,7 +32,7 @@ export default function CompleteProfile() {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/users/complete-profile', formData, {
+      const res = await axios.post('https://health-ai-platform-backend.onrender.com/api/users/complete-profile', formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

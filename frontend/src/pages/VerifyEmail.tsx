@@ -22,7 +22,7 @@ export default function VerifyEmail() {
 
     const verify = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/auth/verify-email?token=${token}`);
+        const res = await axios.get(`https://health-ai-platform-backend.onrender.com/api/auth/verify-email?token=${token}`);
         setStatus('success');
         setMessage(res.data.message);
       } catch (err: any) {

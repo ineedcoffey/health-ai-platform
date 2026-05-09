@@ -47,7 +47,7 @@ export default function ResetPassword() {
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/api/auth/reset-password', {
+      await axios.post('https://health-ai-platform-backend.onrender.com/api/auth/reset-password', {
         token,
         password
       });
@@ -121,24 +121,23 @@ export default function ResetPassword() {
           <div className="password-strength">
             <div className="password-strength-bar">
               <div
-                className={`password-strength-fill ${
-                  password.length === 0 ? '' :
-                  password.length < 8 ? 'strength-weak' :
-                  password.length < 12 ? 'strength-medium' :
-                  'strength-strong'
-                }`}
+                className={`password-strength-fill ${password.length === 0 ? '' :
+                    password.length < 8 ? 'strength-weak' :
+                      password.length < 12 ? 'strength-medium' :
+                        'strength-strong'
+                  }`}
                 style={{
                   width: password.length === 0 ? '0%' :
-                         password.length < 8 ? '33%' :
-                         password.length < 12 ? '66%' : '100%'
+                    password.length < 8 ? '33%' :
+                      password.length < 12 ? '66%' : '100%'
                 }}
               ></div>
             </div>
             <span className="password-strength-label">
               {password.length === 0 ? '' :
-               password.length < 8 ? 'Weak — needs 8+ characters' :
-               password.length < 12 ? 'Good' :
-               'Strong'}
+                password.length < 8 ? 'Weak — needs 8+ characters' :
+                  password.length < 12 ? 'Good' :
+                    'Strong'}
             </span>
           </div>
 

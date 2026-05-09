@@ -97,7 +97,7 @@ export default function Dashboard() {
     const fetchProfile = async () => {
       if (!token) return;
       try {
-        const res = await axios.get('http://localhost:5000/api/users/profile', {
+        const res = await axios.get('https://health-ai-platform-backend.onrender.com/api/users/profile', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUserProfile(res.data);
@@ -111,7 +111,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/posts');
+        const response = await axios.get('https://health-ai-platform-backend.onrender.com/api/posts');
         setPosts(response.data);
       } catch (error) {
         console.error('Failed to load posts:', error);

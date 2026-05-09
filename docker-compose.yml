@@ -40,7 +40,7 @@ services:
       dockerfile: Dockerfile
     container_name: health_ai_frontend
     environment:
-      - REACT_APP_API_URL=http://localhost:5000/api
+      - REACT_APP_API_URL=https://health-ai-platform-backend.onrender.com/api
     ports:
       - "3000:3000"
     depends_on:

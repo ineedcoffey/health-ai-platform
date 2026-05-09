@@ -28,7 +28,7 @@ export default function Inbox() {
 
   const fetchRequests = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/meetings/my-requests', {
+      const res = await axios.get('https://health-ai-platform-backend.onrender.com/api/meetings/my-requests', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRequests(res.data);
@@ -57,7 +57,7 @@ export default function Inbox() {
     }
 
     try {
-      await axios.patch(`http://localhost:5000/api/meetings/${selectedRequest.id}/status`, {
+      await axios.patch(`https://health-ai-platform-backend.onrender.com/api/meetings/${selectedRequest.id}/status`, {
         status: 'ACCEPTED',
         selected_time_slot: selectedSlot,
       }, {
@@ -82,7 +82,7 @@ export default function Inbox() {
 
   const handleDecline = async () => {
     try {
-      await axios.patch(`http://localhost:5000/api/meetings/${selectedRequest.id}/status`, {
+      await axios.patch(`https://health-ai-platform-backend.onrender.com/api/meetings/${selectedRequest.id}/status`, {
         status: 'DECLINED',
         decline_reason: declineReason || 'No reason provided.',
       }, {
@@ -103,7 +103,7 @@ export default function Inbox() {
     if (!confirm('Are you sure you want to cancel this meeting request?')) return;
 
     try {
-      await axios.put(`http://localhost:5000/api/meetings/${requestId}/cancel`, {}, {
+      await axios.put(`https://health-ai-platform-backend.onrender.com/api/meetings/${requestId}/cancel`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

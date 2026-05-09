@@ -53,7 +53,7 @@ Write-Host "[3/4] Starting backend server..." -ForegroundColor Yellow
 $null = Start-Process powershell -ArgumentList "-NoProfile", "-Command", "cd '$ROOT\backend'; npx ts-node src/index.ts" -PassThru -WindowStyle Normal
 Start-Sleep -Seconds 2
 
-Write-Host "  Backend running on http://localhost:5000" -ForegroundColor Green
+Write-Host "  Backend running on https://health-ai-platform-backend.onrender.com" -ForegroundColor Green
 
 # ── Step 4: Start Frontend ─────────────────────────────────────────────────
 
@@ -72,7 +72,7 @@ Write-Host "   All services are running!" -ForegroundColor Green
 Write-Host "  ==============================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "  Frontend:  http://localhost:5173" -ForegroundColor Cyan
-Write-Host "  Backend:   http://localhost:5000" -ForegroundColor Cyan
+Write-Host "  Backend:   https://health-ai-platform-backend.onrender.com" -ForegroundColor Cyan
 Write-Host "  Database:  localhost:5433" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  To stop all services:" -ForegroundColor Gray

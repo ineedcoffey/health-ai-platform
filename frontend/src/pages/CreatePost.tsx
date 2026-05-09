@@ -54,7 +54,7 @@ export default function CreatePost() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/users/profile', {
+        const res = await axios.get('https://health-ai-platform-backend.onrender.com/api/users/profile', {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.data.city) setCity(res.data.city);
@@ -74,7 +74,7 @@ export default function CreatePost() {
 
     setSubmitting(true);
     try {
-      await axios.post('http://localhost:5000/api/posts', {
+      await axios.post('https://health-ai-platform-backend.onrender.com/api/posts', {
         title,
         working_domain: workingDomain,
         required_expertise: requiredExpertise,

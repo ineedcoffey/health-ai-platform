@@ -35,7 +35,7 @@ export default function AdminDashboard() {
   // ── Data Fetchers ────────────────────────────────────────────────────
   const fetchStats = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/admin/stats', { headers });
+      const res = await axios.get('https://health-ai-platform-backend.onrender.com/api/admin/stats', { headers });
       setStats(res.data);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to load stats.');
@@ -45,7 +45,7 @@ export default function AdminDashboard() {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/admin/posts', { headers });
+      const res = await axios.get('https://health-ai-platform-backend.onrender.com/api/admin/posts', { headers });
       setPosts(res.data);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to load posts.');
@@ -57,7 +57,7 @@ export default function AdminDashboard() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/admin/users', { headers });
+      const res = await axios.get('https://health-ai-platform-backend.onrender.com/api/admin/users', { headers });
       setUsers(res.data);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to load users.');
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
   const fetchLogs = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/admin/logs', { headers });
+      const res = await axios.get('https://health-ai-platform-backend.onrender.com/api/admin/logs', { headers });
       setLogs(res.data);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to load audit logs.');
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
   const handleRemovePost = async (postId: string, title: string) => {
     if (!confirm(`Remove post "${title}"? This will set its status to REMOVED.`)) return;
     try {
-      await axios.patch(`http://localhost:5000/api/admin/posts/${postId}/remove`, {}, { headers });
+      await axios.patch(`https://health-ai-platform-backend.onrender.com/api/admin/posts/${postId}/remove`, {}, { headers });
       toast.success('Post removed successfully.');
       fetchPosts();
       fetchStats();
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
     const action = currentlyActive ? 'suspend' : 'reactivate';
     if (!confirm(`${currentlyActive ? 'Suspend' : 'Reactivate'} user "${email}"?`)) return;
     try {
-      await axios.patch(`http://localhost:5000/api/admin/users/${userId}/suspend`, {}, { headers });
+      await axios.patch(`https://health-ai-platform-backend.onrender.com/api/admin/users/${userId}/suspend`, {}, { headers });
       toast.success(`User ${action}d successfully.`);
       fetchUsers();
       fetchStats();
@@ -115,9 +115,9 @@ export default function AdminDashboard() {
   };
 
   const handleDownloadCSV = () => {
-    window.open('http://localhost:5000/api/admin/logs/csv', '_blank');
+    window.open('https://health-ai-platform-backend.onrender.com/api/admin/logs/csv', '_blank');
     // Note: This will fail without auth. Let's use fetch instead:
-    axios.get('http://localhost:5000/api/admin/logs/csv', {
+    axios.get('https://health-ai-platform-backend.onrender.com/api/admin/logs/csv', {
       headers,
       responseType: 'blob'
     }).then(res => {
@@ -370,8 +370,8 @@ export default function AdminDashboard() {
                             background: user.role === 'ENGINEER'
                               ? 'linear-gradient(135deg, var(--info), var(--primary))'
                               : user.role === 'ADMIN'
-                              ? 'linear-gradient(135deg, var(--warning), var(--danger))'
-                              : 'linear-gradient(135deg, var(--accent), var(--success))',
+                                ? 'linear-gradient(135deg, var(--warning), var(--danger))'
+                                : 'linear-gradient(135deg, var(--accent), var(--success))',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             fontSize: '0.7rem', color: 'white', fontWeight: '700',
                           }}>
@@ -388,10 +388,9 @@ export default function AdminDashboard() {
                         </div>
                       </td>
                       <td style={tdStyle}>
-                        <span className={`badge ${
-                          user.role === 'ADMIN' ? 'badge-warning' :
-                          user.role === 'ENGINEER' ? 'badge-info' : 'badge-accent'
-                        }`}>
+                        <span className={`badge ${user.role === 'ADMIN' ? 'badge-warning' :
+                            user.role === 'ENGINEER' ? 'badge-info' : 'badge-accent'
+                          }`}>
                           {user.role === 'ADMIN' ? '🛡️' : user.role === 'ENGINEER' ? '⚙️' : '🏥'} {user.role}
                         </span>
                       </td>
