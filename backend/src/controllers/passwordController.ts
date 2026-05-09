@@ -53,11 +53,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
     });
 
     // Send password reset email
-    try {
-      await sendPasswordResetEmail(user.email, resetToken, user.full_name);
-    } catch (emailErr) {
+    sendPasswordResetEmail(user.email, resetToken, user.full_name).catch((emailErr) => {
       console.error('Failed to send password reset email:', emailErr);
-    }
+    });
 
     res.json({ message: genericMessage });
   } catch (error) {

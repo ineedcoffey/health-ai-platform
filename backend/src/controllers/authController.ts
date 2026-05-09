@@ -88,11 +88,9 @@ export const register = async (req: Request, res: Response) => {
     console.log(`───────────────────────────────────────────────────────────────\n`);
 
     // Send verification email (non-blocking — don't fail registration if email fails)
-    try {
-      await sendVerificationEmail(user.email, verificationToken);
-    } catch (emailErr) {
+    sendVerificationEmail(user.email, verificationToken).catch((emailErr) => {
       console.error('Failed to send verification email:', emailErr);
-    }
+    });
 
     // FR-14: Generic success message (no information leakage)
     res.status(201).json({
@@ -199,11 +197,9 @@ export const resendVerification = async (req: Request, res: Response) => {
     console.log(`   Link: ${clientUrl}/verify-email?token=${verificationToken}`);
     console.log(`───────────────────────────────────────────────────────────────\n`);
 
-    try {
-      await sendVerificationEmail(user.email, verificationToken, user.full_name);
-    } catch (emailErr) {
+    sendVerificationEmail(user.email, verificationToken, user.full_name).catch((emailErr) => {
       console.error('Failed to resend verification email:', emailErr);
-    }
+    });
 
     res.json({
       message: "If this email is registered and unverified, a new verification link has been sent.",
