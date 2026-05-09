@@ -9,6 +9,7 @@ import ResetPassword from './pages/ResetPassword';
 import CompleteProfile from './pages/CompleteProfile';
 import Dashboard from './pages/Dashboard';
 import CreatePost from './pages/CreatePost';
+import EditPost from './pages/EditPost';
 import Profile from './pages/Profile';
 import MeetingRequest from './pages/MeetingRequest';
 import Inbox from './pages/Inbox';
@@ -192,6 +193,7 @@ function App() {
             {/* Protected Routes — require auth AND completed profile */}
             <Route path="/dashboard" element={<ProfileGuard><Dashboard /></ProfileGuard>} />
             <Route path="/create-post" element={<ProfileGuard><CreatePost /></ProfileGuard>} />
+            <Route path="/edit-post/:id" element={<ProfileGuard><EditPost /></ProfileGuard>} />
             <Route path="/my-posts" element={<ProfileGuard><MyPosts /></ProfileGuard>} />
             <Route path="/profile" element={<ProfileGuard><Profile /></ProfileGuard>} />
             <Route path="/inbox" element={<ProfileGuard><Inbox /></ProfileGuard>} />
